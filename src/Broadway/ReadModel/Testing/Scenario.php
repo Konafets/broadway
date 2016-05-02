@@ -93,9 +93,9 @@ class Scenario
      *
      * @return Scenario
      */
-    public function when($event, DateTime $occurredOn = null)
+    public function when($event, DateTime $occurredOn = null, array $metadata = array())
     {
-        $this->projector->handle($this->createDomainMessageForEvent($event, $occurredOn));
+        $this->projector->handle($this->createDomainMessageForEvent($event, $occurredOn, $metadata));
 
         return $this;
     }
@@ -112,7 +112,7 @@ class Scenario
         return $this;
     }
 
-    private function createDomainMessageForEvent($event, DateTime $occurredOn = null)
+    private function createDomainMessageForEvent($event, DateTime $occurredOn = null, array $metadata = array())
     {
         $this->playhead++;
 
@@ -121,6 +121,6 @@ class Scenario
             $occurredOn        = $dateTimeGenerator($event);
         }
 
-        return new DomainMessage($this->aggregateId, $this->playhead, new Metadata(array()), $event, $occurredOn);
+        return new DomainMessage($this->aggregateId, $this->playhead, new Metadata($metadata), $event, $occurredOn);
     }
 }
